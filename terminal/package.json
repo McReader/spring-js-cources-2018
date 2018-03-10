@@ -1,0 +1,25 @@
+{
+  "name": "todos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/McReader/spring-js-cources-2018.git"
+  },
+  "author": "dzianis_roi@epam.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/McReader/spring-js-cources-2018/issues"
+  },
+  "preferGlobal": true,
+  "bin": "./index.js",
+  "homepage": "https://github.com/McReader/spring-js-cources-2018#readme",
+  "dependencies": {
+    "commander": "2.14.1",
+    "inquirer": "5.1.0"
+  }
+}
