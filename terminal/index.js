@@ -59,7 +59,7 @@ program
   .alias('upd')
   .description('Update TODO item')
   .action((id) => {
-    prompt(questions).then(answers => {
+    prompt(updateQuestions).then(answers => {
       // TODO update todo
     });
   });
