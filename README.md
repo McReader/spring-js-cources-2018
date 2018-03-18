@@ -9,11 +9,11 @@
 
 #### Applications
 
-* Terminal
-* Web client
-* Client-Server
-* Desktop
-* Mobile
+* [Terminal](terminal/README.md)
+* Web client *// TBD*
+* Client-Server *// TBD*
+* Desktop *// TBD*
+* Mobile *// TBD*
 
 #### Curriculum
 
