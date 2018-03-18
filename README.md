@@ -2,10 +2,10 @@
 
 ### Table of contents
 
-* Applications
-* Curriculum
-* Extra task
-* Self study
+* [Applications](#applications)
+* [Curriculum](#curriculum)
+* [Extra task](#extra-task)
+* [Self study](#self-study)
 
 #### Applications
 
@@ -153,3 +153,20 @@ Run TODO application on mobile using React Native
 *Useful links:*
 * https://facebook.github.io/react-native/
 
+### Self study
+
+*JavaScript:*
+- https://learn.javascript.ru/
+- https://www.youtube.com/playlist?list=PL363QX7S8MfSxcHzvkNEqMYbOyhLeWwem
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types
+
+*HTML/CSS:*
+- https://htmlacademy.ru/
+- https://www.youtube.com/playlist?list=PL026CCEB5125879C2
+- https://www.w3schools.com/css/
+
+*General IT skills:*
+- https://yandexdataschool.ru/edu-process/courses/algorithms
+- https://www.ozon.ru/context/detail/id/2457392/
+- https://epa.ms/code-battle
+- https://developer.chrome.com/devtools
