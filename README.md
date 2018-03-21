@@ -30,6 +30,7 @@
     - https://git-scm.com/book/en/v2
     - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
     - https://docs.gitlab.com/ce/workflow/README.html
+    - https://nodejs.org/en/docs/inspector/
 
 3. **Terminal app**
 
