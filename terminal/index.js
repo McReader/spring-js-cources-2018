@@ -1,11 +1,63 @@
 #!/usr/bin/env node
-
 const program = require('commander');
 const { prompt } = require('inquirer');
+const fs = require('fs');
+const path = require('path');
 
 program
   .version('0.0.1')
   .description('TODO app');
+
+const storagePath = path.resolve('./store.json');
+
+
+function openFile() {
+  return new Promise((resolve, reject) => {
+    fs.open(storagePath, 'a+', (err, fd) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(fd);
+    });
+  });
+}
+
+function readFile() {
+  return new Promise((resolve, reject) => {
+    fs.readFile(storagePath, 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(data);
+    });
+  });
+}
+
+function writeFile(data) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(storagePath, data, (err) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve();
+    });
+  });
+}
+
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
 
 // Craft questions to present to users
 const createQuestions = [
@@ -42,16 +94,41 @@ const commentQuestions = [
   },
 ];
 
-const todos = [];
-
 program
   .command('create')
   .alias('cr')
   .description('Create new TODO item')
   .action(() => {
-    prompt(createQuestions).then(answers => {
-      // TODO add todo
-    });
+    let answers;
+
+    prompt(createQuestions)
+      .then((receivedAnswers) => {
+        answers = receivedAnswers;
+        return openFile().then()
+      })
+      .then((fd) => {
+        return readFile();
+      })
+      .then((data) => {
+        return JSON.parse(data);
+      })
+      .then((obj) => {
+        obj.todos.push({
+          id: guid(),
+          title: answers.title,
+          description: answers.description,
+        });
+        return obj;
+      })
+      .then((updatedObj) => {
+        return JSON.stringify(updatedObj);
+      })
+      .then((data) => {
+        writeFile(data);
+      })
+      .catch((error) => {
+        console.error(`error: ${error}`);
+      });
   });
 
 program
