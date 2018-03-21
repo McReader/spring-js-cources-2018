@@ -21,13 +21,15 @@
 
 2. **Program review. NodeJS & npm. Git.**
     
-    We will try to answer on following questions: What is this? How to use? Why do we need this tools? 
+    We will try to answer on following questions: What is this? How to use? Why do we need this tools?
 
     *Useful links:*
     - https://nodejs.org/en/
     - https://www.npmjs.com/
     - https://github.com/
     - https://git-scm.com/book/en/v2
+    - https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+    - https://docs.gitlab.com/ce/workflow/README.html
 
 3. **Terminal app**
 
@@ -37,6 +39,7 @@
         - https://scotch.io/tutorials/build-an-interactive-command-line-application-with-nodejs
         - https://www.npmjs.com/package/commander
         - https://www.npmjs.com/package/inquirer
+        - https://developer.mozilla.org/ru/docs/Web/JavaScript/EventLoop
 
     * **Implement business logic.**
 
