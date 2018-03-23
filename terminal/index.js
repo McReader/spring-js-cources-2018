@@ -6,9 +6,10 @@ const path = require('path');
 
 program
   .version('0.0.1')
-  .description('TODO app');
+  .description('This is a TODO application');
 
 const storagePath = path.resolve('./store.json');
+const ACCOUNT_ID = 1;
 
 
 function openFile() {
@@ -48,6 +49,68 @@ function writeFile(data) {
       resolve();
     });
   });
+}
+
+function getAllTodos() {
+  return openFile()
+    .then(() => {
+      return readFile();
+    })
+    .then((data) => {
+      return JSON.parse(data);
+    })
+    .then((storage) => {
+      return storage.todos || [];
+    });
+}
+
+function saveAllTodos(todos) {
+  return writeFile(JSON.stringify({ todos }));
+}
+
+function findTodoIndex(id, todos) {
+  return todos.findIndex((todo) => todo.id === id)
+}
+
+function createTodo(data) {
+  return {
+    createdDate: new Date(),
+    createdByUserId: ACCOUNT_ID,
+    description: data.description,
+    id: guid(),
+    title: data.title,
+  };
+}
+
+function addTodo(todo, todos) {
+  return [...todos, todo];
+}
+
+function updateTodo(id, change, todos) {
+  const index = findTodoIndex(id, todos);
+  const currentTodo = todos[index];
+
+  const updatedTodo = {
+    ...currentTodo,
+    ...change,
+    lastUpdateDate: new Date(),
+    lastUpdateByUserId: ACCOUNT_ID,
+    createdDate: currentTodo.createdDate,
+    createdByUserId: currentTodo.createdByUserId,
+  };
+
+  const result = [...todos];
+
+  result.splice(index, 1, updatedTodo);
+
+  return result;
+}
+
+function removeTodo(id, todos) {
+  const index = findTodoIndex(id, todos);
+  const result = [...todos];
+  result.splice(index, 1);
+  return result;
 }
 
 function guid() {
@@ -99,35 +162,21 @@ program
   .alias('cr')
   .description('Create new TODO item')
   .action(() => {
-    let answers;
+    let receivedAnswers;
 
     prompt(createQuestions)
-      .then((receivedAnswers) => {
-        answers = receivedAnswers;
-        return openFile().then()
+      .then((answers) => {
+        receivedAnswers = answers;
+        return getAllTodos();
       })
-      .then((fd) => {
-        return readFile();
+      .then((todos) => {
+        const todo = createTodo(receivedAnswers);
+        const updatedTodos = addTodo(todo, todos);
+        return saveAllTodos(updatedTodos).then(() => todo.id);
       })
-      .then((data) => {
-        return JSON.parse(data);
-      })
-      .then((obj) => {
-        obj.todos.push({
-          id: guid(),
-          title: answers.title,
-          description: answers.description,
-        });
-        return obj;
-      })
-      .then((updatedObj) => {
-        return JSON.stringify(updatedObj);
-      })
-      .then((data) => {
-        writeFile(data);
-      })
+      .then((newTodoId) => console.log(newTodoId))
       .catch((error) => {
-        console.error(`error: ${error}`);
+        throw error;
       });
   });
 
@@ -136,9 +185,23 @@ program
   .alias('upd')
   .description('Update TODO item')
   .action((id) => {
-    prompt(updateQuestions).then(answers => {
-      // TODO update todo
-    });
+    let receiveAnswers;
+
+    prompt(updateQuestions)
+      .then(answers => {
+        receiveAnswers = answers;
+        return getAllTodos();
+      })
+      .then((todos) => {
+        const result = updateTodo(id, receiveAnswers, todos);
+        return saveAllTodos(result).then(() => id);
+      })
+      .then((updatedTodoId) => {
+        console.log(updatedTodoId);
+      })
+      .catch((e) => {
+        throw e;
+      });
   });
 
 program
@@ -146,7 +209,17 @@ program
   .alias('rm')
   .description('Remove TODO item by id')
   .action((id) => {
-    // TODO remove item
+    getAllTodos()
+      .then((todos) => {
+        const result = removeTodo(id, todos);
+        return saveAllTodos(result).then(() => id);
+      })
+      .then((updatedTodoId) => {
+        console.log(updatedTodoId);
+      })
+      .catch((e) => {
+        throw e;
+      });
   });
 
 program
@@ -154,7 +227,10 @@ program
   .alias('ls')
   .description('List all TODOs')
   .action(() => {
-    // TODO write todos list to the cli
+    getAllTodos()
+      .then((todos) => {
+        console.log(todos);
+      })
   });
 
 program
@@ -162,7 +238,17 @@ program
   .alias('lk')
   .description('Like TODO item')
   .action((id) => {
-    // TODO mark todo item as liked
+    getAllTodos()
+      .then((todos) => {
+        const result = updateTodo(id, { isLiked: true, createdDate: new Date() }, todos);
+        return saveAllTodos(result).then(() => id);
+      })
+      .then((updatedTodoId) => {
+        console.log(updatedTodoId);
+      })
+      .catch((e) => {
+        throw e;
+      });
   });
 
 program
@@ -170,9 +256,23 @@ program
   .alias('cmt')
   .description('Comment TODO item')
   .action((id) => {
-    prompt(commentQuestions).then(answers => {
-      // TODO comment for todo item
-    });
+    let receivedAnswers;
+
+    prompt(commentQuestions)
+      .then((answers) => {
+        receivedAnswers = answers;
+        return getAllTodos();
+      })
+      .then((todos) => {
+        const result = updateTodo(id, { comment: receivedAnswers.comment }, todos);
+        return saveAllTodos(result).then(() => id);
+      })
+      .then((updatedTodoId) => {
+        console.log(updatedTodoId);
+      })
+      .catch((e) => {
+        throw e;
+      });
   });
 
 program.parse(process.argv);
