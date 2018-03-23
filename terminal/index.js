@@ -9,7 +9,7 @@ program
   .version('0.0.1')
   .description('This is a TODO application');
 
-const storagePath = path.resolve('./store.json');
+const STORAGE_PATH = path.resolve('./store.json');
 const ACCOUNT_ID = 1;
 
 const fsOpen = util.promisify(fs.open);
@@ -18,9 +18,9 @@ const fsWriteFile = util.promisify(fs.writeFile);
 
 
 function getAllTodos() {
-  return fsOpen(storagePath, 'a+')
+  return fsOpen(STORAGE_PATH, 'a+')
     .then(() => {
-      return fsReadFile(storagePath, 'utf8');
+      return fsReadFile(STORAGE_PATH, 'utf8');
     })
     .then((data) => {
       return JSON.parse(data);
@@ -31,7 +31,7 @@ function getAllTodos() {
 }
 
 function saveAllTodos(todos) {
-  return fsWriteFile(storagePath, JSON.stringify({ todos }));
+  return fsWriteFile(STORAGE_PATH, JSON.stringify({ todos }));
 }
 
 
