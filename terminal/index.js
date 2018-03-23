@@ -51,7 +51,7 @@ function guid() {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 
-function inform(...args) {
+function print(...args) {
   console.info(...args);
 }
 
@@ -158,7 +158,7 @@ program
   .action(() => {
     prompt(createQuestions)
       .then(({ title, description }) => createTodoItem({ title, description }))
-      .then(inform)
+      .then(print)
       .catch((error) => {
         throw error;
       });
@@ -170,7 +170,7 @@ program
   .action((id) => {
     prompt(updateQuestions)
       .then(({ title, description }) => updateTodoItem(id, { title, description }))
-      .then(inform)
+      .then(print)
       .catch((e) => {
         throw e;
       });
@@ -182,7 +182,7 @@ program
   .description('Remove TODO item by id')
   .action((id) => {
     removeTodoItem(id)
-      .then(inform)
+      .then(print)
       .catch((e) => {
         throw e;
       });
@@ -193,7 +193,7 @@ program
   .alias('ls')
   .description('List all TODOs')
   .action(() => {
-    getAllTodos().then(inform)
+    getAllTodos().then(print)
   });
 
 program
@@ -201,7 +201,7 @@ program
   .description('Like TODO item')
   .action((id) => {
     updateTodoItem(id, { isLiked: true })
-      .then(inform)
+      .then(print)
       .catch((e) => {
         throw e;
       });
@@ -213,7 +213,7 @@ program
   .action((id) => {
     prompt(commentQuestions)
       .then(({ comment }) => updateTodoItem(id, { comment }))
-      .then(inform)
+      .then(print)
       .catch((e) => {
         throw e;
       });
