@@ -33,13 +33,13 @@ function getAllTodos() {
 function saveAllTodos(todos) {
   return fsOpen(STORAGE_PATH, O_APPEND | O_CREAT)
     .then(() => {
-      fsWriteFile(STORAGE_PATH, JSON.stringify({ todos }))
+      fsWriteFile(STORAGE_PATH, JSON.stringify({ todos }));
     });
 }
 
 
 function findTodoIndex(id, todos) {
-  return todos.findIndex((todo) => todo.id === id)
+  return todos.findIndex((todo) => todo.id === id);
 }
 
 function guid() {
@@ -87,7 +87,7 @@ function createTodoItem(data) {
     .then((todos) => {
       const todo = createTodo(data);
       const result = [...todos, todo];
-      return saveAllTodos(result).then(() => todo.id)
+      return saveAllTodos(result).then(() => todo.id);
     });
 }
 
@@ -100,7 +100,7 @@ function updateTodoItem(id, change) {
 
       result.splice(index, 1, updateTodo(change, target));
 
-      return saveAllTodos(result).then(() => id)
+      return saveAllTodos(result).then(() => id);
     });
 }
 
@@ -157,10 +157,7 @@ program
   .description('Create new TODO item')
   .action(() => {
     prompt(createQuestions)
-      .then((answers) => createTodoItem({
-        title: answers.title,
-        description: answers.description,
-      }))
+      .then(({ title, description }) => createTodoItem({ title, description }))
       .then(inform)
       .catch((error) => {
         throw error;
@@ -172,10 +169,7 @@ program
   .description('Update TODO item')
   .action((id) => {
     prompt(updateQuestions)
-      .then((answers) => updateTodoItem(id, {
-        title: answers.title,
-        description: answers.description,
-      }))
+      .then(({ title, description }) => updateTodoItem(id, { title, description }))
       .then(inform)
       .catch((e) => {
         throw e;
@@ -218,7 +212,7 @@ program
   .description('Comment TODO item')
   .action((id) => {
     prompt(commentQuestions)
-      .then((answers) => updateTodoItem(id, { comment: answers.comment }))
+      .then(({ comment }) => updateTodoItem(id, { comment }))
       .then(inform)
       .catch((e) => {
         throw e;
