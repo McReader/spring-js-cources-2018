@@ -34,6 +34,7 @@ function saveAllTodos(todos) {
   return fsWriteFile(storagePath, JSON.stringify({ todos }));
 }
 
+
 function findTodoIndex(id, todos) {
   return todos.findIndex((todo) => todo.id === id)
 }
@@ -46,6 +47,11 @@ function guid() {
   }
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
+
+function inform(...args) {
+  console.info(...args);
+}
+
 
 function createTodo(data) {
   const now = new Date();
@@ -125,6 +131,7 @@ const commentQuestions = [
   },
 ];
 
+
 program
   .command('create')
   .description('Create new TODO item')
@@ -144,7 +151,7 @@ program
         const updatedTodos = addTodo(todo, todos);
         return saveAllTodos(updatedTodos).then(() => todo.id);
       })
-      .then((newTodoId) => console.log(newTodoId))
+      .then(inform)
       .catch((error) => {
         throw error;
       });
@@ -168,9 +175,7 @@ program
         }, todos);
         return saveAllTodos(result).then(() => id);
       })
-      .then((updatedTodoId) => {
-        console.log(updatedTodoId);
-      })
+      .then(inform)
       .catch((e) => {
         throw e;
       });
@@ -186,9 +191,7 @@ program
         const result = removeTodo(id, todos);
         return saveAllTodos(result).then(() => id);
       })
-      .then((updatedTodoId) => {
-        console.log(updatedTodoId);
-      })
+      .then(inform)
       .catch((e) => {
         throw e;
       });
@@ -199,10 +202,7 @@ program
   .alias('ls')
   .description('List all TODOs')
   .action(() => {
-    getAllTodos()
-      .then((todos) => {
-        console.log(todos);
-      })
+    getAllTodos().then(inform)
   });
 
 program
@@ -214,9 +214,7 @@ program
         const result = updateTodo(id, { isLiked: true }, todos);
         return saveAllTodos(result).then(() => id);
       })
-      .then((updatedTodoId) => {
-        console.log(updatedTodoId);
-      })
+      .then(inform)
       .catch((e) => {
         throw e;
       });
@@ -237,9 +235,7 @@ program
         const result = updateTodo(id, { comment: receivedAnswers.comment }, todos);
         return saveAllTodos(result).then(() => id);
       })
-      .then((updatedTodoId) => {
-        console.log(updatedTodoId);
-      })
+      .then(inform)
       .catch((e) => {
         throw e;
       });
