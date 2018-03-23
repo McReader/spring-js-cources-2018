@@ -83,12 +83,16 @@ function updateTodo(change, todo) {
 
 
 function createTodoItem(data) {
+  let todoId;
+
   return getAllTodos()
     .then((todos) => {
       const todo = createTodo(data);
+      todoId = todo.id;
       const result = [...todos, todo];
-      return saveAllTodos(result).then(() => todo.id);
-    });
+      return saveAllTodos(result);
+    })
+    .then(() => todoId);
 }
 
 function updateTodoItem(id, change) {
@@ -100,8 +104,9 @@ function updateTodoItem(id, change) {
 
       result.splice(index, 1, updateTodo(change, target));
 
-      return saveAllTodos(result).then(() => id);
-    });
+      return saveAllTodos(result);
+    })
+    .then(() => id);
 }
 
 function removeTodoItem(id) {
