@@ -11,6 +11,7 @@ program
 
 const STORAGE_PATH = path.resolve('./store.json');
 const ACCOUNT_ID = 1;
+const { O_APPEND, O_RDONLY, O_CREAT } = fs.constants;
 
 const fsOpen = util.promisify(fs.open);
 const fsReadFile = util.promisify(fs.readFile);
@@ -18,10 +19,7 @@ const fsWriteFile = util.promisify(fs.writeFile);
 
 
 function getAllTodos() {
-  return fsOpen(STORAGE_PATH, 'a+')
-    .then(() => {
-      return fsReadFile(STORAGE_PATH, 'utf8');
-    })
+  return fsReadFile(STORAGE_PATH, { encoding: 'utf8', flag: O_RDONLY | O_CREAT })
     .then((data) => {
       return JSON.parse(data);
     })
@@ -31,7 +29,10 @@ function getAllTodos() {
 }
 
 function saveAllTodos(todos) {
-  return fsWriteFile(STORAGE_PATH, JSON.stringify({ todos }));
+  return fsOpen(STORAGE_PATH, O_APPEND | O_CREAT)
+    .then(() => {
+      fsWriteFile(STORAGE_PATH, JSON.stringify({ todos }))
+    });
 }
 
 
