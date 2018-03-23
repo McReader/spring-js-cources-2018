@@ -3,6 +3,7 @@ const program = require('commander');
 const { prompt } = require('inquirer');
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
 
 program
   .version('0.0.1')
@@ -11,50 +12,15 @@ program
 const storagePath = path.resolve('./store.json');
 const ACCOUNT_ID = 1;
 
+const fsOpen = util.promisify(fs.open);
+const fsReadFile = util.promisify(fs.readFile);
+const fsWriteFile = util.promisify(fs.writeFile);
 
-function openFile() {
-  return new Promise((resolve, reject) => {
-    fs.open(storagePath, 'a+', (err, fd) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      resolve(fd);
-    });
-  });
-}
-
-function readFile() {
-  return new Promise((resolve, reject) => {
-    fs.readFile(storagePath, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      resolve(data);
-    });
-  });
-}
-
-function writeFile(data) {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(storagePath, data, (err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      resolve();
-    });
-  });
-}
 
 function getAllTodos() {
-  return openFile()
+  return fsOpen(storagePath, 'a+')
     .then(() => {
-      return readFile();
+      return fsReadFile(storagePath, 'utf8');
     })
     .then((data) => {
       return JSON.parse(data);
@@ -65,20 +31,31 @@ function getAllTodos() {
 }
 
 function saveAllTodos(todos) {
-  return writeFile(JSON.stringify({ todos }));
+  return fsWriteFile(storagePath, JSON.stringify({ todos }));
 }
 
 function findTodoIndex(id, todos) {
   return todos.findIndex((todo) => todo.id === id)
 }
 
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
 function createTodo(data) {
+  const now = new Date();
   return {
-    createdDate: new Date(),
+    createdDate: now,
     createdByUserId: ACCOUNT_ID,
-    description: data.description,
     id: guid(),
-    title: data.title,
+    lastUpdateDate: now,
+    lastUpdateByUserId: ACCOUNT_ID,
+    ...data,
   };
 }
 
@@ -113,16 +90,7 @@ function removeTodo(id, todos) {
   return result;
 }
 
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
 
-// Craft questions to present to users
 const createQuestions = [
   {
     type : 'input',
@@ -159,7 +127,6 @@ const commentQuestions = [
 
 program
   .command('create')
-  .alias('cr')
   .description('Create new TODO item')
   .action(() => {
     let receivedAnswers;
@@ -170,7 +137,10 @@ program
         return getAllTodos();
       })
       .then((todos) => {
-        const todo = createTodo(receivedAnswers);
+        const todo = createTodo({
+          title: receivedAnswers.title,
+          description: receivedAnswers.description,
+        });
         const updatedTodos = addTodo(todo, todos);
         return saveAllTodos(updatedTodos).then(() => todo.id);
       })
@@ -182,18 +152,20 @@ program
 
 program
   .command('update <id>')
-  .alias('upd')
   .description('Update TODO item')
   .action((id) => {
     let receiveAnswers;
 
     prompt(updateQuestions)
-      .then(answers => {
+      .then((answers) => {
         receiveAnswers = answers;
         return getAllTodos();
       })
       .then((todos) => {
-        const result = updateTodo(id, receiveAnswers, todos);
+        const result = updateTodo(id, {
+          title: receiveAnswers.title,
+          description: receiveAnswers.description,
+        }, todos);
         return saveAllTodos(result).then(() => id);
       })
       .then((updatedTodoId) => {
@@ -235,12 +207,11 @@ program
 
 program
   .command('like <id>')
-  .alias('lk')
   .description('Like TODO item')
   .action((id) => {
     getAllTodos()
       .then((todos) => {
-        const result = updateTodo(id, { isLiked: true, createdDate: new Date() }, todos);
+        const result = updateTodo(id, { isLiked: true }, todos);
         return saveAllTodos(result).then(() => id);
       })
       .then((updatedTodoId) => {
@@ -253,7 +224,6 @@ program
 
 program
   .command('comment <id>')
-  .alias('cmt')
   .description('Comment TODO item')
   .action((id) => {
     let receivedAnswers;
