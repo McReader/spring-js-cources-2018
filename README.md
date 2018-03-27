@@ -53,15 +53,19 @@
 4. **HTML/CSS**
     
     * **Lesson 1**
+        *Useful links:*
+        - https://htmlacademy.ru/courses/4/run/1
+        - http://flexboxfroggy.com
+        - https://www.freecodecamp.org/map-aside#nested-collapseHTML5andCSS
+
     * **Lesson 2**
+    * **Lesson 3**
 
-5. **????**
-
-6. **Intermediate check**
+5. **Intermediate check**
 
     Terminal application made by students should be verified by experts.
 
-7. **Web client app**
+6. **Web client app**
 
     * **Application setup**
 
@@ -95,17 +99,17 @@
     
         Make application persist changes made by user.
 
-8. **Code quality**
+7. **Code quality**
+
+8. **????**
 
 9. **????**
 
-10. **????**
-
-11. **Intermediate check**
+10. **Intermediate check**
 
     Web Client application made by students should be verified by experts.
 
-12. **Сlient-Server app**
+11. **Сlient-Server app**
 
     * **Client-Server architecture. REST basics. Setup NodeJS server app**
 
@@ -130,17 +134,17 @@
         - https://mongodb.github.io/node-mongodb-native/
         - http://mongoosejs.com/
 
+12. **????**
+
 13. **????**
 
 14. **????**
 
-15. **????**
-
-16. **Intermediate check**
+15. **Intermediate check**
 
     Client-Server application made by students should be verified by experts.
 
-17. **Desktop app**
+16. **Desktop app**
 
     * **Introduction to electron. Application setup**
 
