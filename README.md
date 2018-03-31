@@ -59,7 +59,10 @@
         - https://www.freecodecamp.org/map-aside#nested-collapseHTML5andCSS
 
     * **Lesson 2**
+        Task with a star (not required) - Create markup using BEM for Todo App
+
     * **Lesson 3**
+        Task with a star (not required) - Style markup for Todo App
 
 5. **Intermediate check**
 
