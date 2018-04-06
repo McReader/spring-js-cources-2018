@@ -1,0 +1,37 @@
+{
+  "name": "spring-js-cources-2018-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/McReader/spring-js-cources-2018.git"
+  },
+  "author": "dzianis_roi@epam.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/McReader/spring-js-cources-2018/issues"
+  },
+  "homepage": "https://github.com/McReader/spring-js-cources-2018#readme",
+  "dependencies": {
+    "react": "16.3.1",
+    "react-dom": "16.3.1",
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.10",
+    "style-loader": "^0.20.3",
+    "webpack": "4.1.1",
+    "webpack-cli": "^2.0.11",
+    "webpack-dev-server": "3.1.1"
+  }
+}

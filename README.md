@@ -20,7 +20,7 @@
 1. **Intro**
 
 2. **Program review. NodeJS & npm. Git.**
-    
+
     We will try to answer on following questions: What is this? How to use? Why do we need this tools?
 
     *Useful links:*
@@ -35,7 +35,7 @@
 3. **Terminal app**
 
     * **Setup application. Requirements analysis.**
-    
+
         *Useful links:*
         - https://scotch.io/tutorials/build-an-interactive-command-line-application-with-nodejs
         - https://www.npmjs.com/package/commander
@@ -51,7 +51,7 @@
         Implement application requirements.
 
 4. **HTML/CSS**
-    
+
     * **Lesson 1**
         *Useful links:*
         - https://htmlacademy.ru/courses/4/run/1
@@ -75,11 +75,15 @@
         - https://webpack.js.org/
         - https://webpack.js.org/configuration/dev-server/
         - https://github.com/facebook/create-react-app
+        - https://gulpjs.com/
+        - https://rollupjs.org/guide/en
+        - https://learn.javascript.ru/modules
+        - https://babeljs.io/
 
     * **Introduction to React**
 
         Introduction into react basics
-        
+
         *Useful links:*
         - https://reactjs.org/
 
@@ -92,11 +96,11 @@
         Business logic implemented for terminal app should be migrated to Web Client app.
 
     * **Architectural mistakes analysis**
-    
+
         Highlight and analyse mistakes made during implementation of terminal app. Fix this mistakes.
 
     * **Persist application data to file**
-    
+
         Make application persist changes made by user.
 
 7. **Code quality**
@@ -118,17 +122,17 @@
         - http://expressjs.com/
 
     * **Move business logic to server side**
-    
+
     * **Architectural mistakes analysis**
-                
+
         Highlight and analyse mistakes made during implementation of Web Client app. Fix this mistakes. Improve components modularity
 
     * **Unit tests**
 
         Importance of testing will be discussed. Discover testing approaches. Cover implemented business logic by unit tests.
-    
+
     * **Persist application data into MongoDB**
-    
+
         *Useful links:*
         - https://www.mongodb.com/
         - https://mongodb.github.io/node-mongodb-native/
