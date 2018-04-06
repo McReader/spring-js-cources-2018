@@ -79,6 +79,7 @@
         - https://rollupjs.org/guide/en
         - https://learn.javascript.ru/modules
         - https://babeljs.io/
+        - https://eslint.org/
 
     * **Introduction to React**
 

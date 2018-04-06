@@ -26,13 +26,13 @@ npm link
 To run application you need to execute commands using following template
 
 ```bash
-node index.js <command> [...options]
+node index.jsx <command> [...options]
 ```
 
 for example
 
 ```bash
-node index.js remove 938355a4-256c-11e8-b467-0ed5f89f718b
+node index.jsx remove 938355a4-256c-11e8-b467-0ed5f89f718b
 ```
 
 or if you've created symbolic link you may use `todos` program
