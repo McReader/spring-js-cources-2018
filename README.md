@@ -103,6 +103,9 @@
 
         Highlight and analyse mistakes made during implementation of terminal app. Fix this mistakes.
 
+        *Useful links:*
+        - http://usejsdoc.org/
+
     * **Persist application data to file**
 
         Make application persist changes made by user.

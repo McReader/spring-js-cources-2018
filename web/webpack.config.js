@@ -10,12 +10,12 @@ module.exports = {
   mode: 'development',
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-      },
+      // {
+      //   enforce: 'pre',
+      //   test: /\.jsx?$/,
+      //   exclude: /node_modules/,
+      //   loader: 'eslint-loader',
+      // },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -24,16 +24,16 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          {loader: "style-loader"},
-          {loader: "css-loader"}
-        ]
-      }
-    ]
+          { loader: "style-loader" },
+          { loader: "css-loader" },
+        ],
+      },
+    ],
   },
   resolve: {
-    extensions: [".js", ".jsx"]
+    extensions: ['.js', '.jsx'],
   },
   devServer: {
-    contentBase: './dist'
+    contentBase: './dist',
   },
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Greet from './Greet';
+
+import { TodoApp } from './todo-app';
 
 
-ReactDOM.render(<Greet />, document.getElementById('react-root'));
+ReactDOM.render(<TodoApp />, document.getElementById('react-root'));
