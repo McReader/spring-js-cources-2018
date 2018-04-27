@@ -1,8 +1,8 @@
 import { ACCOUNT_ID } from '../constants';
 import { guid } from '../utils';
 
-export default {
-  createTodo: (data) => {
+export default class TodoService {
+  createTodo(data) {
     const now = new Date();
     return {
       comment: null,
@@ -14,14 +14,16 @@ export default {
       lastUpdateByUserId: ACCOUNT_ID,
       ...data,
     };
-  },
+  }
 
-  updateTodo: (change, todo) => ({
-    ...todo,
-    ...change,
-    lastUpdateDate: new Date(),
-    lastUpdateByUserId: ACCOUNT_ID,
-    createdDate: todo.createdDate,
-    createdByUserId: todo.createdByUserId,
-  }),
+  updateTodo(change, todo) {
+    return {
+      ...todo,
+      ...change,
+      lastUpdateDate: new Date(),
+      lastUpdateByUserId: ACCOUNT_ID,
+      createdDate: todo.createdDate,
+      createdByUserId: todo.createdByUserId,
+    };
+  }
 };

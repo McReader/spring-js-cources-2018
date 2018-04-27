@@ -1,10 +1,7 @@
-import todoService from './todoService';
-// import todosListDAO from '../dao/todosListDAO';
-
-
 export default class TodosListService {
-  constructor(todosListDAO) {
+  constructor(todosListDAO, todoService) {
     this.todosListDAO = todosListDAO;
+    this.todoService = todoService;
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -22,7 +19,7 @@ export default class TodosListService {
 
     return this.todosListDAO.getAllTodos()
       .then((todos) => {
-        const todo = todoService.createTodo(data);
+        const todo = this.todoService.createTodo(data);
         todoId = todo.id;
         const result = [...todos, todo];
         return this.todosListDAO.saveAllTodos(result);
