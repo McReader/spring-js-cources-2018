@@ -13,6 +13,7 @@ export default class TodosListService {
    * @param {Object} data
    * @param {string} data.title
    * @param {string} data.description
+   * @return {Promise<string>}
    */
   createTodoItem(data) {
     let todoId;
