@@ -126,7 +126,9 @@
 
         *Useful links:*
         - [What is a RESTful API?](https://medium.com/@lazlojuly/what-is-a-restful-api-fabb8dc2afeb)
-        - http://expressjs.com/
+        - [express](http://expressjs.com/)
+        - [Postman](https://www.getpostman.com/)
+        - [Nodemon](https://www.npmjs.com/package/nodemon)
 
     * **Move business logic to server side**
 
