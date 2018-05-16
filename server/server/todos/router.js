@@ -1,87 +1,89 @@
-import DummyTodosListDAO from '../../core/todos/DummyTodosListDAO';
+import express from 'express';
 
-const express = require('express');
-
-const router = express.Router({});
-
-/**
- * @type {TodosListDAO}
- */
-const todosListDAO = new DummyTodosListDAO();
-const todoService = new TodoService();
-const todosListService = new TodosListService(todoService, todosListDAO);
+import TodosListService from '../../core/todos/TodosListService';
+import TodoService from '../../core/todos/TodoService';
+import TodosListMongoDAO from './TodosListMongoDAO';
 
 
-router.get('/', (req, res) => {
-  // return all todos
-  todosListDAO
-    .getAllTodos()
-    .then((todos) => {
-      res.json(todos);
-    });
-});
+export default function createRouter(connection) {
+  const router = express.Router({});
 
-router.post('/', (req, res) => {
-  // create new todo
-  const { title, description } = req.body;
+  /**
+   * @type {TodosListDAO}
+   */
+  const todosListDAO = new TodosListMongoDAO(connection);
+  const todoService = new TodoService();
+  const todosListService = new TodosListService(todosListDAO, todoService);
 
-  todosListService
-    .createTodoItem({
-      title, description
-    })
-    .then((id) => {
-      res.json({ id });
-    });
-});
 
-router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-
-  todosListService
-    .updateTodoItem(id, req.body)
-    .then((id) => {
-      res.json({ id });
-    })
-});
-
-router.patch('/:id/completed', (req, res) => {
-  const { id } = req.params;
-  const { completed } = req.body;
-
-  todosListService
-    .toggleTodoItem(id, completed)
-    .then((result) => {
-      res.send(result);
-    })
-});
-
-router.patch('/:id/like', (req, res) => {
-  const { id } = req.params;
-  const { isLiked } = req.body;
-
-  let promise;
-
-  if (isLiked) {
-    promise = todosListService.likeTodoItem(id);
-  } else {
-    promise = todosListService.dislikeTodoItem(id);
-  }
-
-  promise.then((result) => {
-    res.send(result);
+  router.get('/', (req, res) => {
+    todosListDAO
+      .getAllTodos()
+      .then((todos) => {
+        res.json(todos);
+      });
   });
-});
 
-router.patch('/:id/comment', (req, res) => {
-  const { id } = req.params;
-  const { comment } = req.body;
+  router.post('/', (req, res) => {
+    const { title, description } = req.body;
 
-  todosListService
-    .commentTodoItem(id, comment)
-    .then((result) => {
+    todosListService
+      .createTodoItem({
+        title, description
+      })
+      .then((id) => {
+        res.json({ id });
+      });
+  });
+
+  router.patch('/:id', (req, res) => {
+    const { id } = req.params;
+
+    todosListService
+      .updateTodoItem(id, req.body)
+      .then((id) => {
+        res.json({ id });
+      });
+  });
+
+  router.patch('/:id/completed', (req, res) => {
+    const { id } = req.params;
+    const { completed } = req.body;
+
+    todosListService
+      .toggleTodoItem(id, completed)
+      .then((result) => {
+        res.send(result);
+      })
+  });
+
+  router.patch('/:id/like', (req, res) => {
+    const { id } = req.params;
+    const { isLiked } = req.body;
+
+    let promise;
+
+    if (isLiked) {
+      promise = todosListService.likeTodoItem(id);
+    } else {
+      promise = todosListService.dislikeTodoItem(id);
+    }
+
+    promise.then((result) => {
       res.send(result);
     });
-});
+  });
 
+  router.patch('/:id/comment', (req, res) => {
+    const { id } = req.params;
+    const { comment } = req.body;
 
-module.exports = router;
+    todosListService
+      .commentTodoItem(id, comment)
+      .then((result) => {
+        res.send(result);
+      });
+  });
+
+  return router;
+}

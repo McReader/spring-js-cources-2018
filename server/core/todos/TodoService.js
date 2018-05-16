@@ -1,4 +1,4 @@
-import { ACCOUNT_ID } from '../constants';
+import { ACCOUNT_ID } from './constants';
 import { guid } from '../utils';
 
 export default class TodoService {

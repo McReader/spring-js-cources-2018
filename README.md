@@ -129,6 +129,9 @@
         - [express](http://expressjs.com/)
         - [Postman](https://www.getpostman.com/)
         - [Nodemon](https://www.npmjs.com/package/nodemon)
+        - [babel-node](https://github.com/babel/example-node-server)
+        - [Robo 3T](https://robomongo.org/)
+        - [mongodb](http://mongodb.github.io/node-mongodb-native/)
 
     * **Move business logic to server side**
 

@@ -9,13 +9,13 @@ export default class TodosListService {
    * @param todoService
    */
   constructor(todosListDAO, todoService) {
+    console.log()
     this.todosListDAO = todosListDAO;
     this.todoService = todoService;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  findTodoIndex(todoId) {
-    // todo
+  findTodoIndex(todoId, todos) {
+    return todos.findIndex((todo) => todo.id === todoId);
   }
 
   /**
@@ -44,11 +44,11 @@ export default class TodosListService {
   updateTodoItem(todoId, change) {
     return this.todosListDAO.getAllTodos()
       .then((todos) => {
-        const index = this.todosListDAO.findTodoIndex(todoId, todos);
+        const index = this.findTodoIndex(todoId, todos);
         const target = todos[index];
         const result = [...todos];
 
-        result.splice(index, 1, todoService.updateTodo(change, target));
+        result.splice(index, 1, this.todoService.updateTodo(change, target));
 
         return this.todosListDAO.saveAllTodos(result);
       })

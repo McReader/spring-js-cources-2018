@@ -1,6 +1,7 @@
-const router = require('./router');
-const TodosListMongoDAO = require('./TodosListMongoDAO');
+import createRouter from './router';
+import TodosListMongoDAO from './TodosListMongoDAO';
 
-
-exports.router = router;
-exports.TodosListMongoDAO = TodosListMongoDAO;
+export {
+  createRouter,
+  TodosListMongoDAO,
+};
