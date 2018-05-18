@@ -130,8 +130,7 @@
         - [Postman](https://www.getpostman.com/)
         - [Nodemon](https://www.npmjs.com/package/nodemon)
         - [babel-node](https://github.com/babel/example-node-server)
-        - [Robo 3T](https://robomongo.org/)
-        - [mongodb](http://mongodb.github.io/node-mongodb-native/)
+        - [NodeJS Screencast](https://learn.javascript.ru/screencast/nodejs)
 
     * **Move business logic to server side**
 
@@ -149,6 +148,8 @@
         - https://www.mongodb.com/
         - https://mongodb.github.io/node-mongodb-native/
         - http://mongoosejs.com/
+        - [Robo 3T](https://robomongo.org/)
+        - [mongodb](http://mongodb.github.io/node-mongodb-native/)
 
 12. **????**
 
