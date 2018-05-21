@@ -20,7 +20,7 @@ export default function createRouter() {
 
   router.get('/', (req, res) => {
     todosListDAO
-      .getAllTodos()
+      .getAll()
       .then((todos) => {
         res.json(todos);
       });
@@ -53,7 +53,7 @@ export default function createRouter() {
     const { completed } = req.body;
 
     todosListService
-      .toggleTodoItem(id, completed)
+      .toggleItemCompleted(id, completed)
       .then((result) => {
         res.send(result);
       })
@@ -63,17 +63,9 @@ export default function createRouter() {
     const { id } = req.params;
     const { isLiked } = req.body;
 
-    let promise;
-
-    if (isLiked) {
-      promise = todosListService.likeTodoItem(id);
-    } else {
-      promise = todosListService.dislikeTodoItem(id);
-    }
-
-    promise.then((result) => {
-      res.send(result);
-    });
+    todosListService
+      .toggleItemLike(id, isLiked)
+      .then((result) => res.send(result));
   });
 
   router.patch('/:id/comment', (req, res) => {
@@ -81,7 +73,7 @@ export default function createRouter() {
     const { comment } = req.body;
 
     todosListService
-      .commentTodoItem(id, comment)
+      .addItemComment(id, comment)
       .then((result) => {
         res.send(result);
       });

@@ -5,8 +5,13 @@ export default class TodosListService {
   todosListDAO;
 
   /**
+   * @type {TodoService}
+   */
+  todoService;
+
+  /**
    * @param {TodosListDAO} todosListDAO
-   * @param todoService
+   * @param {TodoService} todoService
    */
   constructor(todosListDAO, todoService) {
     this.todosListDAO = todosListDAO;
@@ -57,5 +62,14 @@ export default class TodosListService {
    */
   toggleItemLike(todoId, isLiked) {
     return this.updateTodoItem(todoId, { isLiked });
+  }
+
+  /**
+   * @param {string} todoId
+   * @param {boolean} isCompleted
+   * @return {Promise<TodoItem>}
+   */
+  toggleItemCompleted(todoId, isCompleted) {
+    return this.updateTodoItem(todoId, { isCompleted });
   }
 }
