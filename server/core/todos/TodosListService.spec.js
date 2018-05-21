@@ -43,11 +43,11 @@ describe('TodosListService', () => {
 
     afterEach(() => {
       todoService.createTodo.restore();
-      todosListDAO.saveAllTodos.restore();
+      todosListDAO.create.restore();
     });
 
-    it('should return id of created todo', () => {
-      expect(result).toBe(justCreatedTodo.id);
+    it('should return just created created todo', () => {
+      expect(result).toBe(justCreatedTodo);
     });
 
     it('todo service should be called for creating new todo', () => {
@@ -58,8 +58,8 @@ describe('TodosListService', () => {
       expect(todoService.createTodo.getCall(0).args[0]).toBe(todoChange);
     });
 
-    it('todosListDAO should save all todos', () => {
-      expect(todosListDAO.saveAllTodos.calledOnce).toBe(true);
+    it('should call todosListDAO\'s create method', () => {
+      expect(todosListDAO.create.calledOnce).toBe(true);
     });
   });
 });
