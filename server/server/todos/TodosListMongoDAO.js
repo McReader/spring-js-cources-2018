@@ -56,7 +56,7 @@ export default class TodosListMongoDAO extends TodosListDAO {
     let deletedCount = 0;
 
     try {
-       const result = await collection.deleteOne({ _id: id }).toArray();
+       const result = await collection.deleteOne({ _id: id });
        deletedCount = result.deletedCount;
     } finally {
       connection.close();

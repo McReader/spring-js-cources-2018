@@ -10,8 +10,8 @@
 #### Applications
 
 * [Terminal](terminal/README.md)
-* Web client *// TBD*
-* Client-Server *// TBD*
+* [Web client](web/README.md)
+* [Server](server)
 * Desktop *// TBD*
 * Mobile *// TBD*
 
@@ -106,7 +106,7 @@
         *Useful links:*
         - http://usejsdoc.org/
 
-    * **Persist application data to file**
+    * **Persist application data into local storage**
 
         Make application persist changes made by user.
 
@@ -120,7 +120,7 @@
 
     Web Client application made by students should be verified by experts.
 
-11. **Сlient-Server app**
+11. **Server app**
 
     * **Client-Server architecture. REST basics. Setup NodeJS server app**
 
