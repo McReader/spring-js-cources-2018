@@ -1,6 +1,6 @@
 import TodoService from './TodoService';
 import { guid } from '../utils';
-import { ACCOUNT_ID } from '../constants';
+import { ACCOUNT_ID } from './constants';
 
 
 describe('TodoService', () => {

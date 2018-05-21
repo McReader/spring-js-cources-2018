@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import TodosListService from './TodosListService';
-import DummyTodosListDAO from '../dao/DummyTodosListDAO';
+import DummyTodosListDAO from './DummyTodosListDAO';
 import TodoService from './TodoService';
 
 
@@ -16,7 +16,7 @@ describe('TodosListService', () => {
 
   describe('when creating new todo', () => {
     let justCreatedTodo;
-    let todoParams;
+    let todoChange;
     let result;
 
     beforeAll(() => {
@@ -28,15 +28,15 @@ describe('TodosListService', () => {
       justCreatedTodo = {
         id: '1231233513251251235',
       };
-      todoParams = {
+      todoChange = {
         title: 'Test',
         description: 'Test description',
       };
 
       sinon.stub(todoService, 'createTodo').returns(justCreatedTodo);
-      sinon.spy(todosListDAO, 'saveAllTodos');
+      sinon.spy(todosListDAO, 'create');
 
-      return todosListService.createTodoItem(todoParams).then((r) => {
+      return todosListService.createTodoItem(todoChange).then((r) => {
         result = r;
       });
     });
@@ -55,17 +55,11 @@ describe('TodosListService', () => {
     });
 
     it('todo service should be called with appropriate params', () => {
-      expect(todoService.createTodo.getCall(0).args[0]).toBe(todoParams);
+      expect(todoService.createTodo.getCall(0).args[0]).toBe(todoChange);
     });
 
     it('todosListDAO should save all todos', () => {
       expect(todosListDAO.saveAllTodos.calledOnce).toBe(true);
-    });
-  });
-
-  describe('when updating existing todo', () => {
-    it('everything should be fine', () => {
-      todosListService = new TodosListService();
     });
   });
 });

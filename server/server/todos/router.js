@@ -1,17 +1,19 @@
 import express from 'express';
+import { MongoClient } from 'mongodb';
 
-import TodosListService from '../../core/todos/TodosListService';
-import TodoService from '../../core/todos/TodoService';
+import { TodoService, TodosListService } from '../../core/todos';
+import {MONGO_URI} from '../constants';
+
 import TodosListMongoDAO from './TodosListMongoDAO';
 
 
-export default function createRouter(connection) {
+export default function createRouter() {
   const router = express.Router({});
 
   /**
    * @type {TodosListDAO}
    */
-  const todosListDAO = new TodosListMongoDAO(connection);
+  const todosListDAO = new TodosListMongoDAO(MongoClient, MONGO_URI);
   const todoService = new TodoService();
   const todosListService = new TodosListService(todosListDAO, todoService);
 
