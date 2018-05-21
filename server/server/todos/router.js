@@ -2,13 +2,16 @@ import express from 'express';
 import { MongoClient } from 'mongodb';
 
 import { TodoService, TodosListService } from '../../core/todos';
-import {MONGO_URI} from '../constants';
+import { MONGO_URI } from '../constants';
 
 import TodosListMongoDAO from './TodosListMongoDAO';
+import TodoNotFoundError from './TodoNotFoundError';
 
 
 export default function createRouter() {
   const router = express.Router({});
+
+  let counter = 0;
 
   /**
    * @type {TodosListDAO}
@@ -16,7 +19,6 @@ export default function createRouter() {
   const todosListDAO = new TodosListMongoDAO(MongoClient, MONGO_URI);
   const todoService = new TodoService();
   const todosListService = new TodosListService(todosListDAO, todoService);
-
 
   router.get('/', (req, res) => {
     todosListDAO
@@ -36,6 +38,14 @@ export default function createRouter() {
       .then((id) => {
         res.json({ id });
       });
+  });
+
+  router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    todosListService
+      .removeTodoItem(id)
+      .then(result => res.json({ deletedCount: result }));
   });
 
   router.patch('/:id', (req, res) => {
@@ -77,6 +87,18 @@ export default function createRouter() {
       .then((result) => {
         res.send(result);
       });
+  });
+
+  router.use((err, req, res, next) => {
+    if (err instanceof TodoNotFoundError) {
+      res
+        .status(404)
+        .json({ message: err.message });
+    } else {
+      next(err);
+    }
+
+    counter += 1;
   });
 
   return router;

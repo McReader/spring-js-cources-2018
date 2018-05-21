@@ -1,63 +1,75 @@
 export default class TodosListService {
+  /**
+   * @type {TodosListDAO}
+   */
+  todosListDAO;
+
+  /**
+   * @type {TodoService}
+   */
+  todoService;
+
+  /**
+   * @param {TodosListDAO} todosListDAO
+   * @param {TodoService} todoService
+   */
   constructor(todosListDAO, todoService) {
     this.todosListDAO = todosListDAO;
     this.todoService = todoService;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  findTodoIndex(todoId) {
-    // todo
-  }
-
   /**
-   * @param {Object} data
-   * @param {string} data.title
-   * @param {string} data.description
-   * @return {Promise<string>}
+   * @param {TodoChange} todoChange
+   * @return {Promise<TodoItem>}
    */
-  createTodoItem(data) {
-    let todoId;
-
-    return this.todosListDAO.getAllTodos()
-      .then((todos) => {
-        const todo = this.todoService.createTodo(data);
-        todoId = todo.id;
-        const result = [...todos, todo];
-        return this.todosListDAO.saveAllTodos(result);
-      })
-      .then(() => todoId);
+  createTodoItem(todoChange) {
+    const todo = this.todoService.createTodo(todoChange);
+    return this.todosListDAO.create(todo);
   }
 
   /**
    * @param {string} todoId
    * @param {TodoChange} change
+   * @return {Promise<TodoItem>}
    */
-  updateTodoItem(todoId, change) {
-    return this.todosListDAO.getAllTodos()
-      .then((todos) => {
-        const index = this.todosListDAO.findTodoIndex(todoId, todos);
-        const target = todos[index];
-        const result = [...todos];
+  async updateTodoItem(todoId, change) {
+    const todo = await this.todosListDAO.getById(todoId);
+    const updatedTodo = this.todoService.updateTodo(change, todo);
+    return this.todosListDAO.update(updatedTodo);
+  }
 
-        result.splice(index, 1, todoService.updateTodo(change, target));
-
-        return this.todosListDAO.saveAllTodos(result);
-      })
-      .then(() => todoId);
+  /**
+   * @param {string} todoId
+   * @returns {Promise<number>}
+   */
+  removeTodoItem(todoId) {
+    return this.todosListDAO.removeById(todoId);
   }
 
   /**
    * @param {string} todoId
    * @param {string} commentText
+   * @return {Promise<TodoItem>}
    */
   addItemComment(todoId, commentText) {
-    this.updateTodoItem(todoId, { comment: commentText });
+    return this.updateTodoItem(todoId, { comment: commentText });
   }
 
   /**
    * @param {string} todoId
+   * @param {boolean} isLiked
+   * @return {Promise<TodoItem>}
    */
-  likeItem(todoId) {
-    this.updateTodoItem(todoId, { isLiked: true });
+  toggleItemLike(todoId, isLiked) {
+    return this.updateTodoItem(todoId, { isLiked });
+  }
+
+  /**
+   * @param {string} todoId
+   * @param {boolean} isCompleted
+   * @return {Promise<TodoItem>}
+   */
+  toggleItemCompleted(todoId, isCompleted) {
+    return this.updateTodoItem(todoId, { isCompleted });
   }
 }

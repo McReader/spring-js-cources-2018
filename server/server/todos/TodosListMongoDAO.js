@@ -9,9 +9,7 @@ export default class TodosListMongoDAO extends TodosListDAO {
   }
 
   async create(todoItem) {
-    const connection = await this.mongoClient.connect(this.mongoURI);
-    const db = connection.db('todos');
-    const collection = db.collection('todos');
+    const { connection, collection } = await this.connect();
 
     try {
       return collection.insertOne(todoItem);
@@ -21,12 +19,10 @@ export default class TodosListMongoDAO extends TodosListDAO {
   }
 
   async update(todoItem) {
-    const connection = await this.mongoClient.connect(this.mongoURI);
-    const db = connection.db('todos');
-    const collection = db.collection('todos');
+    const { connection, collection } = await this.connect();
 
     try {
-      return collection.updateOne({ _id: id }, todoItem);
+      return collection.replaceOne({ id: todoItem.id }, todoItem);
     } finally {
       connection.close();
     }
@@ -37,26 +33,22 @@ export default class TodosListMongoDAO extends TodosListDAO {
   }
 
   async getById(id) {
-    const connection = await this.mongoClient.connect(this.mongoURI);
-    const db = connection.db('todos');
-    const collection = db.collection('todos');
+    const { connection, collection } = await this.connect();
 
     try {
-      return collection.findOne({ _id: id }).toArray();
+      return collection.findOne({ id });
     } finally {
       connection.close();
     }
   }
 
   async removeById(id) {
-    const connection = await this.mongoClient.connect(this.mongoURI);
-    const db = connection.db('todos');
-    const collection = db.collection('todos');
+    const { connection, collection } = await this.connect();
 
     let deletedCount = 0;
 
     try {
-       const result = await collection.deleteOne({ _id: id });
+       const result = await collection.deleteOne({ id });
        deletedCount = result.deletedCount;
     } finally {
       connection.close();
@@ -66,14 +58,20 @@ export default class TodosListMongoDAO extends TodosListDAO {
   }
 
   async getAll() {
-    const connection = await this.mongoClient.connect(this.mongoURI);
-    const db = connection.db('todos');
-    const collection = db.collection('todos');
+    const { connection, collection } = await this.connect();
 
     try {
       return collection.find().toArray();
     } finally {
       connection.close();
     }
+  }
+
+  async connect() {
+    const connection = await this.mongoClient.connect(this.mongoURI);
+    return {
+      collection: connection.db('todos').collection('todos'),
+      connection,
+    };
   }
 }

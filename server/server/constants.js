@@ -1,1 +1,1 @@
-export const MONGO_URI = 'mongodb://localhost:32770';
+export const MONGO_URI = 'mongodb://localhost:32768/';
