@@ -19,7 +19,7 @@ export class ListDataContainer extends Component {
   }
 
   componentDidMount() {
-    this.todosListDAO.getAllTodos()
+    this.todosListDAO.getAll()
       .then((todos) => {
         this.setState({
           list: todos,
