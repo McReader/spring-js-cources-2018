@@ -1,4 +1,5 @@
 # spring-js-cources-2018
+Practical-oriented javascript courses for newbies
 
 ### Table of contents
 
