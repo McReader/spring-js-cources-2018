@@ -12,8 +12,8 @@
 * [Terminal](terminal/README.md)
 * [Web client](web/README.md)
 * [Server](server)
-* [Desktop](desctop)
-* [Mobile](mobile)
+* [Desktop](desktop)
+* Mobile
 
 #### Curriculum
 
