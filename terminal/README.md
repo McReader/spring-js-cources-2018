@@ -93,35 +93,3 @@ The app should provide an API consisting of operations listed below:
 
     TODOs list in JSON format should be printed.
 
-6. Like TODO item.
-
-    It should be possible to mark TODO item as liked using following command:
-
-    ```bash
-        todos like <id>
-    ```
-
-    Actual liked status should be printed to console.
-
-7. Unlike TODO item.
-
-    It should be possible to remove liked mark using following command:
-
-    ```bash
-        todos unlike <id>
-    ```
-
-    Actual liked status should be printed to console.
-
-7. Add comment for TODO item.
-
-    It should be possible to comment todo item using following command
-
-    ```bash
-        todos comment <id>
-    ```
-
-    Then it should be prompted to the user to input comment text.
-
-    As soon text was inputted, new comment should be added to file, target TODO item's id should be printed to console.
-
