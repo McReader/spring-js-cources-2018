@@ -92,4 +92,17 @@ The app should provide an API consisting of operations listed below:
     ```
 
     TODOs list in JSON format should be printed.
+    
+ 6. Update todo status
+ 
+    It should be possible to update TODO status using following command
+    
+    ```bash
+        todos status <id> <status>
+    ```
+    There are three valid statuses:
+        1. open
+        2. in-progress
+        3. done
+
 
