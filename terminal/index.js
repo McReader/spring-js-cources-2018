@@ -42,7 +42,7 @@ const print = (todo) => {
 };
 
 program
-  .command('create')
+  .command('create', 'Create new item')
   .action(() => {
     const questions = [
       {
