@@ -1,227 +1,98 @@
 #!/usr/bin/env node
 const program = require('commander');
-const { prompt } = require('inquirer');
+const inquirer = require('inquirer');
+const uuidv4 = require('uuid/v4');
 const fs = require('fs');
-const path = require('path');
-const util = require('util');
 
-program
-  .version('0.0.1')
-  .description('This is a TODO application');
+const { O_APPEND } = fs.constants;
 
-const STORAGE_PATH = path.resolve('./store.json');
-const ACCOUNT_ID = 1;
-const { O_APPEND, O_RDONLY, O_CREAT } = fs.constants;
+const TODO_STATUS = {
+  OPEN: 'TODO_STATUS_OPEN',
+  IN_PROGRESS: 'TODO_STATUS_IN_PROGRESS',
+  DONE: 'TODO_STATUS_DONE',
+};
 
-const fsOpen = util.promisify(fs.open);
-const fsReadFile = util.promisify(fs.readFile);
-const fsWriteFile = util.promisify(fs.writeFile);
-
-
-function getAllTodos() {
-  return fsReadFile(STORAGE_PATH, { encoding: 'utf8', flag: O_RDONLY | O_CREAT })
-    .then((data) => {
-      let jsonText = data;
-      if (!jsonText) jsonText = '{}';
-      return JSON.parse(jsonText);
-    })
-    .then((storage) => {
-      return storage.todos || [];
+const prompt = (questions, callback) => {
+  inquirer
+    .prompt(questions)
+    .then((answers) => {
+      callback(answers);
     });
-}
+};
 
-function saveAllTodos(todos) {
-  return fsOpen(STORAGE_PATH, O_APPEND | O_CREAT)
-    .then(() => {
-      fsWriteFile(STORAGE_PATH, JSON.stringify({ todos }));
-    });
-}
+const formatDate = (date) => {
+  return date.toISOString();
+};
 
+const createTodo = ({ title, desc }) => ({
+  id: uuidv4(),
+  title,
+  description: desc,
+  createdDate: formatDate(new Date()),
+  status: TODO_STATUS.OPEN,
+  lastUpdatedDate: null,
+});
 
-function findTodoIndex(id, todos) {
-  return todos.findIndex((todo) => todo.id === id);
-}
+const writeToTheFile = (path, todo, callback) => {
+  fs.writeFile(path, JSON.stringify(todo), { flag: O_APPEND }, callback)
+};
 
-function guid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
-
-function print(...args) {
-  console.info(...args);
-}
-
-
-function createTodo(data) {
-  const now = new Date();
-  return {
-    comment: null,
-    createdDate: now,
-    createdByUserId: ACCOUNT_ID,
-    id: guid(),
-    isLiked: false,
-    lastUpdateDate: now,
-    lastUpdateByUserId: ACCOUNT_ID,
-    ...data,
-  };
-}
-
-function updateTodo(change, todo) {
-  return {
-    ...todo,
-    ...change,
-    lastUpdateDate: new Date(),
-    lastUpdateByUserId: ACCOUNT_ID,
-    createdDate: todo.createdDate,
-    createdByUserId: todo.createdByUserId,
-  };
-}
-
-
-function createTodoItem(data) {
-  let todoId;
-
-  return getAllTodos()
-    .then((todos) => {
-      const todo = createTodo(data);
-      todoId = todo.id;
-      const result = [...todos, todo];
-      return saveAllTodos(result);
-    })
-    .then(() => todoId);
-}
-
-function updateTodoItem(id, change) {
-  return getAllTodos()
-    .then((todos) => {
-      const index = findTodoIndex(id, todos);
-      const target = todos[index];
-      const result = [...todos];
-
-      result.splice(index, 1, updateTodo(change, target));
-
-      return saveAllTodos(result);
-    })
-    .then(() => id);
-}
-
-function removeTodoItem(id) {
-  return getAllTodos()
-    .then((todos) => {
-      const index = findTodoIndex(id, todos);
-      const result = [...todos];
-
-      const removedItems = result.splice(index, 1);
-
-      return saveAllTodos(result).then(() => removedItems.length);
-    });
-}
-
-
-const createQuestions = [
-  {
-    type : 'input',
-    name : 'title',
-    message : 'Enter title ...'
-  },
-  {
-    type : 'input',
-    name : 'description',
-    message : 'Enter description ...'
-  },
-];
-
-const updateQuestions = [
-  {
-    type : 'input',
-    name : 'title',
-    message : 'Enter new title ...'
-  },
-  {
-    type : 'input',
-    name : 'description',
-    message : 'Enter new description ...'
-  },
-];
-
-const commentQuestions = [
-  {
-    type : 'input',
-    name : 'comment',
-    message : 'Enter comment ...'
-  },
-];
-
+const print = (todo) => {
+  console.log(todo);
+};
 
 program
   .command('create')
-  .description('Create new TODO item')
   .action(() => {
-    prompt(createQuestions)
-      .then(({ title, description }) => createTodoItem({ title, description }))
-      .then(print)
-      .catch((error) => {
-        throw error;
+    const questions = [
+      {
+        message: 'Enter title...',
+        name: 'title',
+      }, {
+        message: 'Enter description...',
+        name: 'desc',
+      },
+    ];
+
+    prompt(questions, (answers) => {
+      const { title, desc } = answers;
+
+      const todo = createTodo({ title, desc });
+
+      readFromTheFile('./todos.json', (todosArray) => {
+        const updatedTodosArray = [...todosArray, todo];
+
+        writeToTheFile('./todos.json', updatedTodosArray, () => {
+          print(todo);
+        });
       });
+    });
   });
 
 program
-  .command('update <id>')
-  .description('Update TODO item')
+  .command('read <id>', 'Read todo item by unique identifier')
   .action((id) => {
-    prompt(updateQuestions)
-      .then(({ title, description }) => updateTodoItem(id, { title, description }))
-      .then(print)
-      .catch((e) => {
-        throw e;
-      });
-  });
-
-program
-  .command('remove <id>')
-  .alias('rm')
-  .description('Remove TODO item by id')
-  .action((id) => {
-    removeTodoItem(id)
-      .then(print)
-      .catch((e) => {
-        throw e;
-      });
+    console.log(`Read item ${id}`);
   });
 
 program
   .command('list')
-  .alias('ls')
-  .description('List all TODOs')
-  .action(() => {
-    getAllTodos().then(print)
+  .option('--status <status>')
+  .action((cmd) => {
+    console.log(`List items with status ${status}`);
   });
 
 program
-  .command('like <id>')
-  .description('Like TODO item')
+  .command('update <id>')
   .action((id) => {
-    updateTodoItem(id, { isLiked: true })
-      .then(print)
-      .catch((e) => {
-        throw e;
-      });
+    console.log(`Update item with id ${id}`);
   });
 
 program
-  .command('comment <id>')
-  .description('Comment TODO item')
-  .action((id) => {
-    prompt(commentQuestions)
-      .then(({ comment }) => updateTodoItem(id, { comment }))
-      .then(print)
-      .catch((e) => {
-        throw e;
-      });
+  .command('status <id> <status>')
+  .action((id, status) => {
+    console.log(`Update items <${id}> status to ${status}`);
   });
+
 
 program.parse(process.argv);
