@@ -42,7 +42,8 @@ const print = (todo) => {
 };
 
 program
-  .command('create', 'Create new item')
+  .command('create')
+  .description('Create new item')
   .action(() => {
     const questions = [
       {
@@ -70,13 +71,15 @@ program
   });
 
 program
-  .command('read <id>', 'Read todo item by unique identifier')
+  .command('read <id>')
+  .description('Read todo item by unique identifier')
   .action((id) => {
     console.log(`Read item ${id}`);
   });
 
 program
   .command('list')
+  .description('List all items')
   .option('--status <status>')
   .action((cmd) => {
     console.log(`List items with status ${status}`);
@@ -84,12 +87,14 @@ program
 
 program
   .command('update <id>')
+  .description('Update an item by id')
   .action((id) => {
     console.log(`Update item with id ${id}`);
   });
 
 program
   .command('status <id> <status>')
+  .description('Toggle status')
   .action((id, status) => {
     console.log(`Update items <${id}> status to ${status}`);
   });
