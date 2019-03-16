@@ -109,8 +109,38 @@ program
   .command('list')
   .description('List all items')
   .option('--status <status>')
-  .action((cmd) => {
-    console.log(`List items with status ${status}`);
+  .action(({ status }) => {
+    const createStatusPredicate = (status) => {
+      switch (status) {
+        case TODO_STATUS.OPEN:
+          return ({ status }) => status === TODO_STATUS.OPEN;
+        case TODO_STATUS.IN_PROGRESS:
+          return ({ status }) => status === TODO_STATUS.IN_PROGRESS;
+        case TODO_STATUS.DONE:
+          return ({ status }) => status === TODO_STATUS.DONE;
+        default:
+          throw new Error(`Illegal todo status "${status}"`);
+      }
+    };
+
+    const statusMap = {
+      open: TODO_STATUS.OPEN,
+      inprogress: TODO_STATUS.IN_PROGRESS,
+      done: TODO_STATUS.DONE,
+    };
+
+    getAllTodos((error, todosArray) => {
+      let resultArray;
+
+      if (status) {
+        const parsedStatus = statusMap[status];
+        resultArray = todosArray.filter(createStatusPredicate(parsedStatus));
+      } else {
+        resultArray = todosArray;
+      }
+
+      print(resultArray);
+    })
   });
 
 program
