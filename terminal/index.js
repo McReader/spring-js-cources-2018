@@ -4,7 +4,7 @@ const inquirer = require('inquirer');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 
-const { O_APPEND } = fs.constants;
+const { O_WRONLY, O_RDONLY, O_CREAT } = fs.constants;
 
 const TODO_STATUS = {
   OPEN: 'TODO_STATUS_OPEN',
@@ -18,6 +18,10 @@ const prompt = (questions, callback) => {
     .then((answers) => {
       callback(answers);
     });
+};
+
+const print = (todo) => {
+  console.log(todo);
 };
 
 const formatDate = (date) => {
@@ -34,11 +38,27 @@ const createTodo = ({ title, desc }) => ({
 });
 
 const writeToTheFile = (path, todo, callback) => {
-  fs.writeFile(path, JSON.stringify(todo), { flag: O_APPEND }, callback)
+  fs.writeFile(path, JSON.stringify(todo), { flag: O_WRONLY | O_CREAT }, callback)
 };
 
-const print = (todo) => {
-  console.log(todo);
+
+const readFromTheFile = (path, callback) => {
+  fs.readFile(path, { encoding: 'utf8', flag: O_RDONLY | O_CREAT },  callback);
+};
+
+const saveAllTodos = (todos, callback) => {
+  writeToTheFile('./todos.json', todos, callback);
+};
+
+const getAllTodos = (callback) => {
+  return readFromTheFile('./todos.json', (err, data) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    callback(null, data ? JSON.parse(data) : []);
+  });
 };
 
 program
@@ -60,10 +80,18 @@ program
 
       const todo = createTodo({ title, desc });
 
-      readFromTheFile('./todos.json', (todosArray) => {
+      getAllTodos((err, todosArray) => {
+        if (err) {
+          throw err;
+        }
+
         const updatedTodosArray = [...todosArray, todo];
 
-        writeToTheFile('./todos.json', updatedTodosArray, () => {
+        saveAllTodos(updatedTodosArray, (err) => {
+          if (err) {
+            throw err;
+          }
+
           print(todo);
         });
       });
