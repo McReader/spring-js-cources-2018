@@ -3,8 +3,11 @@ const program = require('commander');
 const inquirer = require('inquirer');
 const uuidv4 = require('uuid/v4');
 const fs = require('fs');
+const util = require('util');
 
 const { O_WRONLY, O_RDONLY, O_CREAT } = fs.constants;
+const fsRead = util.promisify(fs.readFile);
+const fsWrite = util.promisify(fs.writeFile);
 
 const TODO_STATUS = {
   OPEN: 'TODO_STATUS_OPEN',
@@ -12,13 +15,7 @@ const TODO_STATUS = {
   DONE: 'TODO_STATUS_DONE',
 };
 
-const prompt = (questions, callback) => {
-  inquirer
-    .prompt(questions)
-    .then((answers) => {
-      callback(answers);
-    });
-};
+const prompt = questions => inquirer.prompt(questions);
 
 const print = (todo) => {
   console.log(todo);
@@ -37,29 +34,13 @@ const createTodo = ({ title, desc }) => ({
   lastUpdatedDate: null,
 });
 
-const writeToTheFile = (path, todo, callback) => {
-  fs.writeFile(path, JSON.stringify(todo), { flag: O_WRONLY | O_CREAT }, callback)
-};
+const writeToTheFile = (path, todo) => fsWrite(path, JSON.stringify(todo), { flag: O_WRONLY | O_CREAT });
+const readFromTheFile = path => fsRead(path, { encoding: 'utf8', flag: O_RDONLY | O_CREAT });
 
 
-const readFromTheFile = (path, callback) => {
-  fs.readFile(path, { encoding: 'utf8', flag: O_RDONLY | O_CREAT },  callback);
-};
-
-const saveAllTodos = (todos, callback) => {
-  writeToTheFile('./todos.json', todos, callback);
-};
-
-const getAllTodos = (callback) => {
-  return readFromTheFile('./todos.json', (err, data) => {
-    if (err) {
-      callback(err);
-      return;
-    }
-
-    callback(null, data ? JSON.parse(data) : []);
-  });
-};
+const saveAllTodos = todos => writeToTheFile('./todos.json', todos);
+const getAllTodos = () => readFromTheFile('./todos.json')
+  .then((data) => data ? JSON.parse(data) : []);
 
 program
   .command('create')
@@ -75,27 +56,20 @@ program
       },
     ];
 
-    prompt(questions, (answers) => {
-      const { title, desc } = answers;
+    let todo;
 
-      const todo = createTodo({ title, desc });
-
-      getAllTodos((err, todosArray) => {
-        if (err) {
-          throw err;
-        }
-
+    prompt(questions)
+      .then(({ title, desc }) => {
+        todo = createTodo({ title, desc });
+        return getAllTodos();
+      })
+      .then((todosArray) => {
         const updatedTodosArray = [...todosArray, todo];
-
-        saveAllTodos(updatedTodosArray, (err) => {
-          if (err) {
-            throw err;
-          }
-
-          print(todo);
-        });
+        return saveAllTodos(updatedTodosArray);
+      })
+      .then(() => {
+        print(todo);
       });
-    });
   });
 
 program
@@ -129,18 +103,19 @@ program
       done: TODO_STATUS.DONE,
     };
 
-    getAllTodos((error, todosArray) => {
-      let resultArray;
+    getAllTodos()
+      .then((todosArray) => {
+        let resultArray;
 
-      if (status) {
-        const parsedStatus = statusMap[status];
-        resultArray = todosArray.filter(createStatusPredicate(parsedStatus));
-      } else {
-        resultArray = todosArray;
-      }
+        if (status) {
+          const parsedStatus = statusMap[status];
+          resultArray = todosArray.filter(createStatusPredicate(parsedStatus));
+        } else {
+          resultArray = todosArray;
+        }
 
-      print(resultArray);
-    })
+        print(resultArray);
+      })
   });
 
 program
