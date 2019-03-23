@@ -39,8 +39,35 @@ const readFromTheFile = path => fsRead(path, { encoding: 'utf8', flag: O_RDONLY 
 
 
 const saveAllTodos = todos => writeToTheFile('./todos.json', todos);
+
 const getAllTodos = () => readFromTheFile('./todos.json')
   .then((data) => data ? JSON.parse(data) : []);
+
+
+const update = (change, item) => ({
+  ...item,
+  ...change,
+  lastUpdateDate: new Date(),
+  createdDate: item.createdDate,
+});
+
+const getById = (id, items) => items.find(item => item.id === id);
+
+const updateById = (id, change, items) => {
+  const targetIndex = items.findIndex(item => item.id === id);
+
+  if (targetIndex === -1) {
+    throw new Error(`Item with id "${id}" is not found`);
+  }
+
+  const target = targetIndex[targetIndex];
+  const updatedTarget = update(change, target);
+
+  const result = [...items];
+  result.splice(targetIndex, 1, updatedTarget);
+
+  return result;
+};
 
 program
   .command('create')
@@ -76,7 +103,9 @@ program
   .command('read <id>')
   .description('Read todo item by unique identifier')
   .action((id) => {
-    console.log(`Read item ${id}`);
+    getAllTodos()
+      .then(todosArray => getById(id, todosArray))
+      .then(print)
   });
 
 program
@@ -122,14 +151,42 @@ program
   .command('update <id>')
   .description('Update an item by id')
   .action((id) => {
-    console.log(`Update item with id ${id}`);
+    const questions = [
+      {
+        message: 'Enter new title...',
+        name: 'title',
+      }, {
+        message: 'Enter new description...',
+        name: 'desc',
+      },
+    ];
+
+    let newTitle;
+    let newDesc;
+
+    prompt(questions)
+      .then(({ title, desc }) => {
+        newTitle = title;
+        newDesc = desc;
+        return getAllTodos();
+      })
+      .then((todosArray) => {
+        const updatedTodosArray = updateById(id, { title: newTitle, desc: newDesc }, todosArray);
+        return saveAllTodos(updatedTodosArray);
+      })
+      .then(print);
   });
 
 program
   .command('status <id> <status>')
   .description('Toggle status')
   .action((id, status) => {
-    console.log(`Update items <${id}> status to ${status}`);
+    getAllTodos()
+      .then((todosArray) => {
+        const updatedTodosArray = updateById(id, { status }, todosArray);
+        return saveAllTodos(updatedTodosArray);
+      })
+      .then(print)
   });
 
 
