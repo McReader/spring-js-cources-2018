@@ -2,38 +2,35 @@ const path = require('path');
 
 module.exports = {
   entry: './src/index.jsx',
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve('dist')
+
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000
   },
-  devtool: 'inline-source-map',
+
   mode: 'development',
+
   module: {
     rules: [
-      // {
-      //   enforce: 'pre',
-      //   test: /\.jsx?$/,
-      //   exclude: /node_modules/,
-      //   loader: 'eslint-loader',
-      // },
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-      },
-      {
-        test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-        ],
-      },
-    ],
+        test: /js?x$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react',
+            ]
+          }
+        }
+      }
+    ]
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
-  devServer: {
-    contentBase: './dist',
-  },
+
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'entry.bundle.js'
+  }
 };

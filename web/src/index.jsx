@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { TodoApp } from './todo-app';
+class Application extends React.Component {
+  render() {
+    return (
+      <div>
+        Hello world
+      </div>
+    );
+  }
+}
 
-
-ReactDOM.render(<TodoApp />, document.getElementById('react-root'));
+ReactDOM.render(<Application />, document.getById('root'));

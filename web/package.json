@@ -1,52 +1,25 @@
 {
-  "name": "spring-js-cources-2018-web",
+  "name": "web",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src/index.jsx",
   "scripts": {
-    "start": "webpack-dev-server --open",
-    "build": "webpack",
-    "watch": "npm run build -- --watch",
-    "test": "jest"
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/McReader/spring-js-cources-2018.git"
-  },
-  "author": "dzianis_roi@epam.com",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/McReader/spring-js-cources-2018/issues"
-  },
-  "homepage": "https://github.com/McReader/spring-js-cources-2018#readme",
   "dependencies": {
-    "prop-types": "^15.6.1",
-    "react": "16.3.1",
-    "react-dom": "16.3.1",
-    "redux": "^3.7.2"
+    "react": "16.8.5",
+    "react-dom": "16.8.5"
   },
   "devDependencies": {
-    "@types/jest": "^22.2.3",
-    "@types/prop-types": "^15.5.2",
-    "@types/sinon": "^4.3.1",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.10",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-import": "^2.10.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.7.0",
-    "jest": "^22.4.3",
-    "sinon": "^4.5.0",
-    "style-loader": "^0.20.3",
-    "webpack": "4.1.1",
-    "webpack-cli": "^2.0.11",
-    "webpack-dev-server": "^3.1.1"
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.2.1"
   }
 }
