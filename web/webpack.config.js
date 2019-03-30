@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './src/index.jsx',
@@ -6,7 +7,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
-    port: 9000
+    port: 9000,
   },
 
   mode: 'development',
@@ -22,15 +23,17 @@ module.exports = {
             presets: [
               '@babel/preset-env',
               '@babel/preset-react',
-            ]
-          }
-        }
-      }
-    ]
+            ],
+          },
+        },
+      },
+    ],
   },
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'entry.bundle.js'
-  }
+    filename: 'entry.bundle.js',
+  },
+
+  plugins: [new HtmlWebpackPlugin({ template: 'src/index.html' })],
 };
