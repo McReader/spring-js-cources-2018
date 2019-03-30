@@ -4,12 +4,13 @@
   "description": "",
   "main": "src/index.jsx",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "prop-types": "^15.7.2",
     "react": "16.8.5",
     "react-dom": "16.8.5"
   },
