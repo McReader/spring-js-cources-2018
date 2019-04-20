@@ -7,8 +7,8 @@ export default function withTodoForm(WrappedComponent) {
       super(props);
 
       this.state = {
-        title: 'Some hardcoded title',
-        descr: 'Some hardcoded title',
+        title: '',
+        descr: '',
       };
 
       this.onTitleChange = this.onTitleChange.bind(this);

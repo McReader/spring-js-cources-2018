@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const program = require('commander');
 const inquirer = require('inquirer');
-const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const util = require('util');
 
@@ -25,14 +24,6 @@ const formatDate = (date) => {
   return date.toISOString();
 };
 
-const createTodo = ({ title, desc }) => ({
-  id: uuidv4(),
-  title,
-  description: desc,
-  createdDate: formatDate(new Date()),
-  status: TODO_STATUS.OPEN,
-  lastUpdatedDate: null,
-});
 
 const writeToTheFile = (path, todo) => fsWrite(path, JSON.stringify(todo), { flag: O_WRONLY | O_CREAT });
 const readFromTheFile = path => fsRead(path, { encoding: 'utf8', flag: O_RDONLY | O_CREAT });

@@ -1,5 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+
+import './TodoForm.css';
 
 
 export default function TodoForm(props) {
@@ -12,28 +17,44 @@ export default function TodoForm(props) {
   } = props;
 
   return (
-    <form onSubmit={onSubmit}>
-      <label>
-        <span>Title</span>
-        <input
-          name='title'
-          onChange={onTitleChange}
-          value={title}
-        />
-      </label>
+    <form onSubmit={onSubmit} className="TodoForm">
+      <Grid
+        container
+        className="TodoFormGrid"
+        spacing={40}
+        direction="column"
+      >
+        <Grid item>
+          <TextField
+            label="Title"
+            name='title'
+            fullWidth
+            onChange={onTitleChange}
+            value={title}
+          />
+        </Grid>
 
-      <label>
-        <span>Description</span>
-        <input
-          name='descr'
-          onChange={onDescriptionChange}
-          value={descr}
-        />
-      </label>
+        <Grid item>
+          <TextField
+            label="Description"
+            name='descr'
+            fullWidth
+            onChange={onDescriptionChange}
+            value={descr}
+          />
+        </Grid>
 
-      <button type="submit">
-        Create todo
-      </button>
+        <Grid item>
+          <Button
+            color="primary"
+            fullWidth
+            variant="contained"
+            type="submit"
+          >
+            Create todo
+          </Button>
+        </Grid>
+      </Grid>
     </form>
   );
 }

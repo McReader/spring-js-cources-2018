@@ -1,0 +1,9 @@
+.TodoForm {
+    display: flex;
+    justify-content: center;
+    padding-top: 80px;
+}
+
+.TodoFormGrid {
+    max-width: 360px;
+}
