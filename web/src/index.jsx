@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import TodosStore from './domain/data/TodosStore';
-import CreateTodo from './domain/services/CreateTodo';
+import TodoService from './domain/services/TodoService';
 
 import TodoForm from './ui/TodoForm.jsx';
 import TodoList from './ui/TodoList.jsx';
@@ -14,7 +14,7 @@ const EnhancedTodoForm = withTodoForm(TodoForm);
 
 
 const todosStore = TodosStore({ localStorage: window.localStorage });
-const createTodoService = CreateTodo({ todosStore });
+const createTodoService = TodoService({ todosStore });
 
 function Application() {
   const [todos, setTodos] = useState(() => {

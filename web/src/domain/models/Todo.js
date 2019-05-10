@@ -19,20 +19,12 @@ export const create = ({ title, description }) => ({
   lastUpdatedDate: null,
 });
 
-
-/**
- * @param {Object} change
- * @param {string} change.title
- * @param {string} change.description
- * @param {TodoModel} item
- * @returns {TodoModel}
- */
-const update = (change, item) => ({
-  ...item,
-  ...change,
-  lastUpdateDate: formatDate(new Date()),
-  createdDate: item.createdDate,
+export const update = ({ title, description }, target) => ({
+  ...target,
+  title,
+  description,
+  lastUpdatedDate: formatDate(new Date()),
 });
 
-export default update;
 
+export const getId = ({ id }) => id;
