@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Checkbox from '@material-ui/core/Checkbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -24,3 +25,11 @@ export default function TodoList(props) {
     </List>
   );
 }
+
+TodoList.propTypes = {
+  todos: PropTypes.array,
+};
+
+TodoList.defaultProps = {
+  todos: [],
+};
