@@ -11,7 +11,7 @@ const TodoService = ({ todosStore }) => ({
   update({ title, desc }) {
     return new Promise(() => {
       const todo = create({ title, desc });
-      return todosStore.addItem(todo);
+      return todosStore.updateItem(todo);
     });
   },
 });
